@@ -795,6 +795,9 @@
     chart.options = opts || {};
     chart.dataSource = dataSource;
     Chartkick.charts[element.id] = chart;
+    chart.Refresh=function(){
+      callback(chart);
+    };
     fetchDataSource(chart, callback);
   }
 
