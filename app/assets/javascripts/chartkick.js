@@ -224,7 +224,12 @@
   }
 
   function sortByTime(a, b) {
-    return a[0].getTime() - b[0].getTime();
+    if (isArray(a)) {
+      return a[0].getTime() - b[0].getTime();
+    }
+    else {
+      return a.x.getTime() - b.x.getTime();
+    }
   }
 
   if ("Highcharts" in window) {
@@ -317,7 +322,14 @@
           data = series[i].data;
           if (!chart.options.discrete) {
             for (j = 0; j < data.length; j++) {
-              data[j][0] = data[j][0].getTime();
+                if (isArray(data[j])){
+                    data[j][0] = data[j][0].getTime();
+                }
+                else
+                {
+                    data[j].x = data[j].x.getTime();
+                }
+
             }
           }
           series[i].marker = {symbol: "circle"};
@@ -721,9 +733,15 @@
       data = toArr(series[i].data);
       r = [];
       for (j = 0; j < data.length; j++) {
-        key = data[j][0];
-        key = time ? toDate(key) : toStr(key);
-        r.push([key, toFloat(data[j][1])]);
+        if (isArray(data[j])) {
+          key = data[j][0];
+          key = time ? toDate(key) : toStr(key);
+          r.push([key, toFloat(data[j][1])]);
+        } else {
+          data[j].x = time ? toDate(data[j].x) : toStr(data[j].x);
+          r.push(data[j]);
+        }
+
       }
       if (time) {
         r.sort(sortByTime);
